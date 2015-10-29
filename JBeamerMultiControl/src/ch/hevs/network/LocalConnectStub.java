@@ -3,7 +3,6 @@ package ch.hevs.network;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -26,8 +25,8 @@ public class LocalConnectStub implements Runnable
 	private Socket socket = null;
 	private String host;
 	private int port;
-	private OutputStream os;
-	private PrintWriter w;
+//	private OutputStream os;
+	private PrintWriter w = null;
 	private InputStreamReader is;
 	private BufferedReader bf;
 
@@ -54,6 +53,7 @@ public class LocalConnectStub implements Runnable
 	{
 		host = h;
 		port = p;
+		
 		this.localqueue = localqueue;
 		identifier = host;
 		internalQueue = new ConcurrentLinkedQueue<NetworkEvent>();
