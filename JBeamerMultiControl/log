@@ -1,0 +1,45 @@
+----------------
+14:26:20:245 -> Configuration file successfully found.
+----------------
+14:26:20:259 -> Configuration file can be used now.
+----------------
+14:26:22:259 -> Configuration file successfully loaded & read.
+----------------
+14:26:22:261 -> The configuration file contains : 
+
+The configuration file contains : 
+
+----------------
+14:26:24:501 -> Connection refused: connect
+----------------
+14:26:25:506 -> Connection refused: connect
+----------------
+14:26:26:506 -> Connection refused: connect
+----------------
+14:26:27:507 -> Connection refused: connect
+----------------
+14:26:28:508 -> Connection refused: connect
+----------------
+14:26:29:510 -> Connection refused: connect
+----------------
+14:26:30:511 -> Connection refused: connect
+----------------
+14:26:31:512 -> Connection refused: connect
+----------------
+14:26:32:512 -> Connection refused: connect
+----------------
+14:26:33:513 -> Connection refused: connect
+----------------
+14:26:34:514 -> Connection refused: connect
+----------------
+14:26:35:514 -> Connection refused: connect
+----------------
+14:26:36:515 -> Connection refused: connect
+----------------
+14:26:37:516 -> Connection refused: connect
+----------------
+14:26:38:516 -> Connection refused: connect
+----------------
+14:26:39:518 -> Connection refused: connect
+----------------
+14:26:39:518 -> Socket with address localhost & port 24000 is successfully opened and ready to use.
