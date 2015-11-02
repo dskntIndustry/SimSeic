@@ -42,19 +42,28 @@ public class ConfigReader
 		if(in != null)
 		{
 			Logger.log("Configuration file successfully found.");
+			bf = new BufferedReader(new InputStreamReader(in));
 		}
 		else
 		{
 			Logger.log("Error : Opening configuration file.");
 		}
-		bf = new BufferedReader(new InputStreamReader(in));
+		
 		if(bf == null)
 		{
-			Logger.log("Error : Buffered reader is null!");
+			Logger.log("Error : Buffered reader is null! Using hardcoded configuration");
+			configholder.put("beamer0", "10.13.1.200");
+			configholder.put("beamer1", "10.13.1.201");
+			configholder.put("beamer2", "10.13.1.202");
+			configholder.put("beamer3", "10.13.1.203");
+			configholder.put("beamer4", "10.13.1.204");
+			configholder.put("beamer5", "10.13.1.205");
+			configholder.put("beamer6", "10.13.1.206");
 		}
 		else
 		{
 			Logger.log("Configuration file can be used now.");
+			readconfig(bf);
 		}
 		try
 		{
@@ -64,7 +73,7 @@ public class ConfigReader
 		{
 			e.printStackTrace();
 		}
-		readconfig(bf);
+		
 	}
 	
 	/**

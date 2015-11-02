@@ -45,7 +45,7 @@ import javax.swing.JMenu;
 /**
  * This class defines the main GUI of the program
  * 
- * @custom.category SimSeic 
+ * @custom.category SimSeic
  * @author Mikael Follonier mikael.follonier@hevs.ch
  * @version 1.0
  *
@@ -63,7 +63,6 @@ public class ControlWindow extends JFrame implements IIntercom
 	private JPanel tab1;
 	private JPanel tab0;
 	private JTabbedPane tabbedPane;
-
 
 	private JScrollPane scrollPane;
 	private JTextArea textArea;
@@ -83,7 +82,7 @@ public class ControlWindow extends JFrame implements IIntercom
 	private JButton btnConnect;
 	private JButton btnDisconnect;
 	private JPanel statuspanel;
-	
+
 	private ArrayList<Component> component = new ArrayList<Component>();
 	private JCheckBox chckbxLogToConsole;
 	private JButton btnFireCustomEvent;
@@ -96,16 +95,19 @@ public class ControlWindow extends JFrame implements IIntercom
 
 	/**
 	 * Constructor of the ControlWindow object (GUI)
+	 * 
 	 * @author Mikael Follonier mikael.follonier@hevs.ch
 	 * 
-	 * @param queue MessagingQueue Object
-	 * @param configholder holding the configuration
-	 */	
+	 * @param queue
+	 *            MessagingQueue Object
+	 * @param configholder
+	 *            holding the configuration
+	 */
 	public ControlWindow(MessagingQueue queue, TreeMap<String, String> configholder)
 	{
 		ch = configholder;
-		//sol = new SerialOverLAN(cr);
-		
+		// sol = new SerialOverLAN(cr);
+
 		Logger.addListener(this);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -119,7 +121,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				e.getWindow().dispose();
 			}
 		});
-		
+
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -141,24 +143,24 @@ public class ControlWindow extends JFrame implements IIntercom
 			e.printStackTrace();
 		}
 
-		setSize(new Dimension(998, 301));
+		setSize(new Dimension(800, 350));
 		setResizable(false);
-		setTitle("Beamer Thread Remote Control");
+		setTitle("Beamers Remote Control");
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tab0 = new JPanel();
 		tab1 = new JPanel();
-		
+
 		textArea = new JTextArea();
-		
+
 		lblAllBeamerControl = new JLabel("All beamer control");
 		lblPowerOn = new JLabel("Power ON");
 		lblCeiling = new JLabel("Ceiling");
 		lblResolution = new JLabel("Resolution");
 		lblSource = new JLabel("Source");
 		lblAutoSource = new JLabel("Auto source");
-		
+
 		btnConnect = new JButton("Connect");
 		btnDisconnect = new JButton("Disconnect");
 		btnPowerOff = new JButton("OFF");
@@ -183,7 +185,6 @@ public class ControlWindow extends JFrame implements IIntercom
 		{ 1.0, 1.0, 1.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
-		
 		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
 		gbc_tabbedPane.insets = new Insets(0, 0, 5, 0);
 		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
@@ -191,20 +192,18 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_tabbedPane.gridy = 0;
 		getContentPane().add(tabbedPane, gbc_tabbedPane);
 
-		
 		tabbedPane.addTab("Main controls", null, tab0, null);
 		GridBagLayout gbl_tab0 = new GridBagLayout();
 		gbl_tab0.columnWidths = new int[]
 		{ 116, 100, 70, 0, 0 };
 		gbl_tab0.rowHeights = new int[]
-		{ 23, 26, 23, 0, 0, 0, 0, 11, 0 };
+		{ 29, 26, 23, 0, 0, 0, 0, 42, 0 };
 		gbl_tab0.columnWeights = new double[]
 		{ 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		gbl_tab0.rowWeights = new double[]
 		{ 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		tab0.setLayout(gbl_tab0);
 
-		
 		tabbedPane.addTab("Options", null, tab1, null);
 		GridBagLayout gbl_tab1 = new GridBagLayout();
 		gbl_tab1.columnWidths = new int[]
@@ -216,17 +215,17 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbl_tab1.rowWeights = new double[]
 		{ 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		tab1.setLayout(gbl_tab1);
-		
+
 		chckbxLogToConsole = new JCheckBox("Log to console");
 		chckbxLogToConsole.setSelected(true);
 		chckbxLogToConsole.addActionListener(new ActionListener()
-		{	
+		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				boolean log = true;
-				log = chckbxLogToConsole.isSelected() ? true: false;
-				Logger.console=log;
+				log = chckbxLogToConsole.isSelected() ? true : false;
+				Logger.console = log;
 			}
 		});
 		GridBagConstraints gbc_chckbxLogToConsole = new GridBagConstraints();
@@ -234,10 +233,11 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_chckbxLogToConsole.gridx = 0;
 		gbc_chckbxLogToConsole.gridy = 0;
 		tab1.add(chckbxLogToConsole, gbc_chckbxLogToConsole);
-		
+
 		customCommandField = new JTextField();
 		customCommandField.setText("10.13.1.200#pwr#1!");
-		customCommandField.setToolTipText("To send custom commands to a projector use the following syntax :\r\n\r\ndestinationIP#command#data with destination IP : 13.10.1.200 format.\r\n\r\nRemember that all commands are case unsensitive and the command field doesn't require the opening and closing parenthesis. Data contains only the transmit data and the ! or ?.");
+		customCommandField
+				.setToolTipText("To send custom commands to a projector use the following syntax :\r\n\r\ndestinationIP#command#data with destination IP : 13.10.1.200 format.\r\n\r\nRemember that all commands are case unsensitive and the command field doesn't require the opening and closing parenthesis. Data contains only the transmit data and the ! or ?.");
 		GridBagConstraints gbc_customCommandField = new GridBagConstraints();
 		gbc_customCommandField.insets = new Insets(0, 0, 5, 5);
 		gbc_customCommandField.fill = GridBagConstraints.HORIZONTAL;
@@ -245,32 +245,36 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_customCommandField.gridy = 1;
 		tab1.add(customCommandField, gbc_customCommandField);
 		customCommandField.setColumns(10);
-		
+
 		btnFireCustomEvent = new JButton("Fire Custom Event");
 		btnFireCustomEvent.addMouseListener(new MouseListener()
 		{
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e)
-			{}
-			
+			{
+			}
+
 			@Override
 			public void mousePressed(MouseEvent e)
-			{}
-			
+			{
+			}
+
 			@Override
 			public void mouseExited(MouseEvent e)
-			{}
-			
+			{
+			}
+
 			@Override
 			public void mouseEntered(MouseEvent e)
-			{}
-			
+			{
+			}
+
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				String[] cmd = null;
-				if((cmd = checkCommand(customCommandField.getText()))!=null)
+				if((cmd = checkCommand(customCommandField.getText())) != null)
 				{
 					queue.getMessagequeue().add(new CommandEvent("localhost", cmd[0], cmd[1], cmd[2]));
 					System.out.println(cmd);
@@ -286,32 +290,36 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnFireCustomEvent.gridx = 0;
 		gbc_btnFireCustomEvent.gridy = 1;
 		tab1.add(btnFireCustomEvent, gbc_btnFireCustomEvent);
-		
+
 		btnOverrideIP = new JButton("Override IP Address");
 		btnOverrideIP.addMouseListener(new MouseListener()
 		{
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e)
-			{}
-			
+			{
+			}
+
 			@Override
 			public void mousePressed(MouseEvent e)
-			{}
-			
+			{
+			}
+
 			@Override
 			public void mouseExited(MouseEvent e)
-			{}
-			
+			{
+			}
+
 			@Override
 			public void mouseEntered(MouseEvent e)
-			{}
-			
+			{
+			}
+
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				String[] cmd = null;
-				if((cmd = checkCommand(customCommandField.getText()))!=null)
+				if((cmd = checkCommand(customCommandField.getText())) != null)
 				{
 					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", cmd[1], cmd[2]));
 					System.out.println(cmd);
@@ -327,7 +335,7 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnOverrideIP.gridx = 0;
 		gbc_btnOverrideIP.gridy = 2;
 		tab1.add(btnOverrideIP, gbc_btnOverrideIP);
-		
+
 		lblConnected = new JLabel("Connection status");
 		GridBagConstraints gbc_lblConnected = new GridBagConstraints();
 		gbc_lblConnected.insets = new Insets(0, 0, 5, 5);
@@ -335,17 +343,13 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_lblConnected.gridy = 0;
 		tab0.add(lblConnected, gbc_lblConnected);
 		statuspanel = new JPanel();
-		
 
-		
-		
 		GridBagConstraints gbc_statuspanel = new GridBagConstraints();
 		gbc_statuspanel.insets = new Insets(0, 0, 5, 5);
 		gbc_statuspanel.gridx = 2;
 		gbc_statuspanel.gridy = 0;
 		tab0.add(statuspanel, gbc_statuspanel);
 
-		
 		textArea.setFont(new Font("Lucida Console", Font.PLAIN, 11));
 		scrollPane = new JScrollPane(textArea);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -356,18 +360,16 @@ public class ControlWindow extends JFrame implements IIntercom
 		tab0.add(scrollPane, gbc_scrollPane);
 		textArea.setEditable(false);
 		textArea.setVisible(true);
-		
-		DefaultCaret caret = (DefaultCaret) textArea.getCaret();
+
+		DefaultCaret caret = (DefaultCaret)textArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		
-		
+
 		GridBagConstraints gbc_lblAllBeamerControl = new GridBagConstraints();
 		gbc_lblAllBeamerControl.insets = new Insets(0, 0, 5, 5);
 		gbc_lblAllBeamerControl.gridx = 0;
 		gbc_lblAllBeamerControl.gridy = 0;
 		tab0.add(lblAllBeamerControl, gbc_lblAllBeamerControl);
-		
-		
+
 		GridBagConstraints gbc_lblPowerOn = new GridBagConstraints();
 		gbc_lblPowerOn.anchor = GridBagConstraints.ABOVE_BASELINE;
 		gbc_lblPowerOn.ipady = 5;
@@ -376,35 +378,31 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_lblPowerOn.gridx = 0;
 		gbc_lblPowerOn.gridy = 2;
 		tab0.add(lblPowerOn, gbc_lblPowerOn);
-		
-		
+
 		GridBagConstraints gbc_lblCeiling = new GridBagConstraints();
 		gbc_lblCeiling.insets = new Insets(0, 0, 5, 5);
 		gbc_lblCeiling.gridx = 0;
 		gbc_lblCeiling.gridy = 5;
 		tab0.add(lblCeiling, gbc_lblCeiling);
-		
+
 		GridBagConstraints gbc_lblResolution = new GridBagConstraints();
 		gbc_lblResolution.insets = new Insets(0, 0, 5, 5);
 		gbc_lblResolution.gridx = 0;
 		gbc_lblResolution.gridy = 6;
 		tab0.add(lblResolution, gbc_lblResolution);
-				
-		
+
 		GridBagConstraints gbc_lblSource = new GridBagConstraints();
 		gbc_lblSource.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSource.gridx = 0;
 		gbc_lblSource.gridy = 4;
 		tab0.add(lblSource, gbc_lblSource);
-		
-		
+
 		GridBagConstraints gbc_lblAutoSource = new GridBagConstraints();
 		gbc_lblAutoSource.insets = new Insets(0, 0, 5, 5);
 		gbc_lblAutoSource.gridx = 0;
 		gbc_lblAutoSource.gridy = 3;
 		tab0.add(lblAutoSource, gbc_lblAutoSource);
 
-		
 		btnConnect.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -437,25 +435,24 @@ public class ControlWindow extends JFrame implements IIntercom
 						ch.forEach((k, v)->
 						{
 							ThreadedSocket ms = new ThreadedSocket(v, 23);
-							queue.getSockets().add(ms);	
+							queue.getSockets().add(ms);
 						});
 						queue.getSockets().forEach(elem->new Thread(elem).start());
 					}
-					else
-					{
-						
-						queue.getSockets().iterator().next().deinitSocket();
-						ch.forEach((k, v)->
-						{
-							ThreadedSocket ms = new ThreadedSocket(v, 23);
-							queue.getSockets().add(ms);	
-						});
-						queue.getSockets().forEach(elem->new Thread(elem).start());
-					}
-
+//					else
+//					{
+//
+//						queue.getSockets().iterator().next().deinitSocket();
+//						ch.forEach((k, v)->
+//						{
+//							ThreadedSocket ms = new ThreadedSocket(v, 23);
+//							queue.getSockets().add(ms);
+//						});
+//						queue.getSockets().forEach(elem->new Thread(elem).start());
+//					}
 
 					btnConnect.setEnabled(false);
-					
+
 					btnDisconnect.setEnabled(true);
 					statuspanel.setBackground(Color.GREEN);
 				}
@@ -468,7 +465,6 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnConnect.gridy = 1;
 		tab0.add(btnConnect, gbc_btnConnect);
 
-		
 		btnDisconnect.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -510,7 +506,6 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnDisconnect.gridy = 1;
 		tab0.add(btnDisconnect, gbc_btnDisconnect);
 
-		
 		btnPowerOff.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -541,7 +536,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				component.forEach(d->d.setEnabled(false));
 				try
 				{
-					Thread.sleep(5*ThreadedSocket.TIMEOUT);
+					Thread.sleep(5 * ThreadedSocket.TIMEOUT);
 				}
 				catch(InterruptedException e1)
 				{
@@ -557,8 +552,7 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnPowerOff.gridx = 2;
 		gbc_btnPowerOff.gridy = 2;
 		tab0.add(btnPowerOff, gbc_btnPowerOff);
-		
-		
+
 		btnPowerOn.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -589,7 +583,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				component.forEach(d->d.setEnabled(false));
 				try
 				{
-					Thread.sleep(5*ThreadedSocket.TIMEOUT);
+					Thread.sleep(5 * ThreadedSocket.TIMEOUT);
 				}
 				catch(InterruptedException e1)
 				{
@@ -605,8 +599,7 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnPowerOn.gridx = 1;
 		gbc_btnPowerOn.gridy = 2;
 		tab0.add(btnPowerOn, gbc_btnPowerOn);
-		
-		
+
 		btnSrcAutoOff.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -632,11 +625,11 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "10.13.1.200", "asc", "0!"));
+				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "asc", "0!"));
 				component.forEach(d->d.setEnabled(false));
 				try
 				{
-					Thread.sleep(1*ThreadedSocket.TIMEOUT);
+					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
 				}
 				catch(InterruptedException e1)
 				{
@@ -651,8 +644,7 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnSrcAutoOff.gridx = 2;
 		gbc_btnSrcAutoOff.gridy = 3;
 		tab0.add(btnSrcAutoOff, gbc_btnSrcAutoOff);
-		
-		
+
 		btnSrcAutoOn.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -682,7 +674,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				component.forEach(d->d.setEnabled(false));
 				try
 				{
-					Thread.sleep(1*ThreadedSocket.TIMEOUT);
+					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
 				}
 				catch(InterruptedException e1)
 				{
@@ -699,7 +691,6 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnSrcAutoOn.gridy = 3;
 		tab0.add(btnSrcAutoOn, gbc_btnSrcAutoOn);
 
-		
 		btnSrcHDMI.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -729,7 +720,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				component.forEach(d->d.setEnabled(false));
 				try
 				{
-					Thread.sleep(1*ThreadedSocket.TIMEOUT);
+					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
 				}
 				catch(InterruptedException e1)
 				{
@@ -745,7 +736,6 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnSrcHDMI.gridy = 4;
 		tab0.add(btnSrcHDMI, gbc_btnSrcHDMI);
 
-		
 		btnResolution43.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -775,7 +765,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				component.forEach(d->d.setEnabled(false));
 				try
 				{
-					Thread.sleep(1*ThreadedSocket.TIMEOUT);
+					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
 				}
 				catch(InterruptedException e1)
 				{
@@ -790,8 +780,7 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnResolution43.gridx = 2;
 		gbc_btnResolution43.gridy = 7;
 		tab0.add(btnResolution43, gbc_btnResolution43);
-		
-		
+
 		btnResolution1610.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -821,7 +810,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				component.forEach(d->d.setEnabled(false));
 				try
 				{
-					Thread.sleep(1*ThreadedSocket.TIMEOUT);
+					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
 				}
 				catch(InterruptedException e1)
 				{
@@ -836,8 +825,7 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnResolution1610.gridx = 1;
 		gbc_btnResolution1610.gridy = 7;
 		tab0.add(btnResolution1610, gbc_btnResolution1610);
-		
-		
+
 		btnResolutionNative.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -867,7 +855,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				component.forEach(d->d.setEnabled(false));
 				try
 				{
-					Thread.sleep(1*ThreadedSocket.TIMEOUT);
+					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
 				}
 				catch(InterruptedException e1)
 				{
@@ -882,8 +870,7 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnResolutionNative.gridx = 1;
 		gbc_btnResolutionNative.gridy = 6;
 		tab0.add(btnResolutionNative, gbc_btnResolutionNative);
-		
-		
+
 		btnCeilOff.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -913,7 +900,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				component.forEach(d->d.setEnabled(false));
 				try
 				{
-					Thread.sleep(2*ThreadedSocket.TIMEOUT);
+					Thread.sleep(2 * ThreadedSocket.TIMEOUT);
 				}
 				catch(InterruptedException e1)
 				{
@@ -928,8 +915,7 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnCeilOff.gridx = 2;
 		gbc_btnCeilOff.gridy = 5;
 		tab0.add(btnCeilOff, gbc_btnCeilOff);
-	
-		
+
 		btnCeilOn.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -959,7 +945,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				component.forEach(d->d.setEnabled(false));
 				try
 				{
-					Thread.sleep(2*ThreadedSocket.TIMEOUT);
+					Thread.sleep(2 * ThreadedSocket.TIMEOUT);
 				}
 				catch(InterruptedException e1)
 				{
@@ -974,8 +960,7 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnCeilOn.gridx = 1;
 		gbc_btnCeilOn.gridy = 5;
 		tab0.add(btnCeilOn, gbc_btnCeilOn);
-		
-		
+
 		btnResolution169.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -1005,7 +990,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				component.forEach(d->d.setEnabled(false));
 				try
 				{
-					Thread.sleep(1*ThreadedSocket.TIMEOUT);
+					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
 				}
 				catch(InterruptedException e1)
 				{
@@ -1020,7 +1005,7 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbc_btnResolution169.gridx = 2;
 		gbc_btnResolution169.gridy = 6;
 		tab0.add(btnResolution169, gbc_btnResolution169);
-		
+
 		component.add(btnCeilOff);
 		component.add(btnCeilOn);
 		component.add(btnPowerOff);
@@ -1032,21 +1017,21 @@ public class ControlWindow extends JFrame implements IIntercom
 		component.add(btnSrcAutoOff);
 		component.add(btnSrcAutoOn);
 		component.add(btnSrcHDMI);
-		
+
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
+
 		mnNewMenu = new JMenu("File");
 		menuBar.add(mnNewMenu);
-		
+
 		mntmExit = new JMenuItem("Exit");
 		mnNewMenu.add(mntmExit);
 		mntmExit.addActionListener(new ActionListener()
 		{
 			@Override
-	        public void actionPerformed(ActionEvent event)
+			public void actionPerformed(ActionEvent event)
 			{
-	        	queue.getSockets().forEach(s->s.deinitSocket());
+				queue.getSockets().forEach(s->s.deinitSocket());
 				queue.getSockets().forEach(s->Logger.log("Application is closing socket for shutdown."));
 				try
 				{
@@ -1056,43 +1041,53 @@ public class ControlWindow extends JFrame implements IIntercom
 				{
 					e.printStackTrace();
 				}
-	            System.exit(0);
-	        }
+				System.exit(0);
+			}
 		});
-		
+
 		this.setVisible(true);
 	}
 
 	/**
-	 * Add a listener to the IIntercom interface. Mainly used for update purposes.
+	 * Add a listener to the IIntercom interface. Mainly used for update
+	 * purposes.
+	 * 
 	 * @author Mikael Follonier mikael.follonier@hevs.ch
 	 * 
-	 * @param l object
-	 */	
+	 * @param l
+	 *            object
+	 */
 	public void addListener(IIntercom l)
 	{
 		communicationListener.add(l);
 	}
 
 	/**
-	 * Implementation of the updateLogWindow(String s) method present in the IIntercom interface.
+	 * Implementation of the updateLogWindow(String s) method present in the
+	 * IIntercom interface.
+	 * 
 	 * @author Mikael Follonier mikael.follonier@hevs.ch
 	 * 
-	 * @param s which is the message to send to the log panel
-	 */	
+	 * @param s
+	 *            which is the message to send to the log panel
+	 */
 	@Override
 	public void updateLogWindow(String s)
 	{
 		textArea.append(s);
 	}
-	
+
 	/**
-	 * Check and split the command when it's a specific command which isn't present in the main tab.
+	 * Check and split the command when it's a specific command which isn't
+	 * present in the main tab.
+	 * 
 	 * @author Mikael Follonier mikael.follonier@hevs.ch
 	 * 
-	 * @param input the command coming from the text fields in option tab
-	 * @return containing the command in several fields otherwise null if the format isn't respected.
-	 */	
+	 * @param input
+	 *            the command coming from the text fields in option tab
+	 * @return containing the command in several fields otherwise null if the
+	 *         format isn't respected.
+	 */
 	public String[] checkCommand(String input)
 	{
 		String[] out = input.split("#");

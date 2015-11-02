@@ -231,18 +231,20 @@ public class LocalConnectStub implements Runnable
 						if(!localqueue.getSockets().isEmpty())
 						{
 							String[] s = Parser.parse(p[3]);
-							localqueue.findInQueue(p[1]).getCommandQueue().add(new CommandEvent(p[0], p[1], s[0], s[1]));
-							e = new NetworkEvent(p[0], p[1], p[2], s[0], s[1]);
+							//localqueue.findInQueue(p[1]).getCommandQueue().add(new CommandEvent(p[0], p[1], s[0], s[1]));
+							//e = new NetworkEvent(p[0], p[1], p[2], s[0], s[1]);
+							Logger.log("External command received "+p[3]+p[4]);
 						}
 					}
 					else if(p[2].equals("data"))
 					{
-						// generated backdoor to receive data
+						// generated backdoor to receive data from the LAB view system or other devices present in
+						// the network
 						
-						System.out.println("Some data???");
-						e = new NetworkEvent(p[0], p[1], p[2], null, p[3]);
+						Logger.log("External data received "+p[3]);
+						//e = new NetworkEvent(p[0], p[1], p[2], null, p[3]);
 					}
-					Logger.log(e.toString());
+					//Logger.log(e.toString());
 				}
 				else
 				{
@@ -257,6 +259,18 @@ public class LocalConnectStub implements Runnable
 					
 				}
 			}
+//			else
+//			{
+//				try
+//				{
+//					Thread.sleep(500);
+//				}
+//				catch(InterruptedException d)
+//				{
+//					// TODO Auto-generated catch block
+//					d.printStackTrace();
+//				}
+//			}
 		}
 	}
 }

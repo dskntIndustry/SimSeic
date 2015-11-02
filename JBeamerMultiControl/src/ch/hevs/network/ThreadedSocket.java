@@ -47,6 +47,7 @@ public class ThreadedSocket implements Runnable
 	 */	
 	public ThreadedSocket(String h, int p)
 	{
+		
 		host = h;
 		port = p;
 		identifier = host;
@@ -78,12 +79,12 @@ public class ThreadedSocket implements Runnable
 		{
 			if(socket != null)
 			{
-				w.print(Constants.telnetInitMessage);
-				w.flush();
 				if(!socket.isClosed())
 				{
 					Logger.log("Socket with address " + host + " & port " + socket.getPort() + " is successfully opened and ready to use.");
 				}
+				w.print(Constants.telnetInitMessage);
+				w.flush();
 			}
 		}
 		catch(Exception e)
@@ -141,12 +142,14 @@ public class ThreadedSocket implements Runnable
 	 * @param address String which is the remote host
 	 * @param command String which is the address to send
 	 */	
-	public void sendCommand(String address, String command)
+	public synchronized void sendCommand(String address, String command)
 	{
+		String formattedcommand = "";
 		command = command.toUpperCase();
-		command = "(" + command + ")";
+		formattedcommand = "(" + command + ")";
 		if(!socket.isClosed())
 		{
+			Logger.log("Command " + formattedcommand + " @ address " + address + " sent.");
 			try
 			{
 				os = socket.getOutputStream();
@@ -156,12 +159,12 @@ public class ThreadedSocket implements Runnable
 			{
 				Logger.log(e.getMessage());
 			}
-			w.print(command);
+			w.print(formattedcommand);
 			w.flush();
-			Logger.log("Command " + command + " @ address " + address + " sent.");
+			
 			if(command.endsWith("!") || command.endsWith("?"))
 			{
-				receive();
+				receive();	
 			}
 		}
 
@@ -173,7 +176,7 @@ public class ThreadedSocket implements Runnable
 	 * 
 	 * @return String which is the received data
 	 */	
-	public String receive()
+	public synchronized String receive()
 	{
 		String res = "";
 		try
@@ -232,6 +235,7 @@ public class ThreadedSocket implements Runnable
 				if(ce != null)
 				{
 					sendCommand(ce.getDestination(), ce.getCmd() + ce.getData());
+
 				}
 			}
 			if(!socket.isConnected())
@@ -242,6 +246,15 @@ public class ThreadedSocket implements Runnable
 					Logger.log("Socket "+ host+" isn't open anymore.");
 				}
 				deinitSocket();
+			}
+			try
+			{
+				Thread.sleep(500);
+			}
+			catch(InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

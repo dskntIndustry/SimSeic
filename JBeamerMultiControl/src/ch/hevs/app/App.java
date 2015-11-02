@@ -23,11 +23,12 @@ public class App
 	 */
 	public static void main(String[] args)
 	{
-		Logger.initLogger("log", true);
+		Logger.initLogger("status.log", true);
 		ConfigReader cr = new ConfigReader("config.properties");
 		MessagingQueue messagequeue = new MessagingQueue();
 		new ControlWindow(messagequeue, cr.getConfig());
 		new Thread(messagequeue).start();
-		new Thread(new LocalConnectStub(messagequeue, "localhost", 24000)).start();
+		// Activate local server communication with LABview
+		//new Thread(new LocalConnectStub(messagequeue, "localhost", 24000)).start();
 	}
 }
