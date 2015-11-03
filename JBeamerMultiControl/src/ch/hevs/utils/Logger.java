@@ -91,7 +91,7 @@ public class Logger
 	 * 
 	 * @param s the file to log data into
 	 */	
-	public static void logToWindow(String s)
+	public static synchronized void logToWindow(String s)
 	{
 		communication.forEach(e->e.updateLogWindow(s));
 	}

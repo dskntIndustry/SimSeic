@@ -90,6 +90,7 @@ public class ThreadedSocket implements Runnable
 		catch(Exception e)
 		{
 			Logger.log("Error : Cannot open socket" + host + socket.getPort());
+			e.printStackTrace();
 			Logger.log(e.getMessage());
 		}
 	}
@@ -104,6 +105,8 @@ public class ThreadedSocket implements Runnable
 		try
 		{
 			socket.close();
+//            socket=null;
+//            System.gc();
 		}
 		catch(IOException e)
 		{
@@ -149,7 +152,7 @@ public class ThreadedSocket implements Runnable
 		formattedcommand = "(" + command + ")";
 		if(!socket.isClosed())
 		{
-			Logger.log("Command " + formattedcommand + " @ address " + address + " sent.");
+			Logger.log("Command " + formattedcommand + " @ address " + getIdentifier() + " sent.");
 			try
 			{
 				os = socket.getOutputStream();
@@ -159,15 +162,35 @@ public class ThreadedSocket implements Runnable
 			{
 				Logger.log(e.getMessage());
 			}
-			w.print(formattedcommand);
+			for(int i = 0; i < formattedcommand.length(); i++)
+			{
+				w.print(formattedcommand.charAt(i));
+				try
+				{
+					Thread.sleep(3);
+				}
+				catch(InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			//w.print(formattedcommand);
 			w.flush();
-			
+			try
+			{
+				Thread.sleep(6);
+			}
+			catch(InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(command.endsWith("!") || command.endsWith("?"))
 			{
 				receive();	
 			}
 		}
-
 	}
 
 	/**
