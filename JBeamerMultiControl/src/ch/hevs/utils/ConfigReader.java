@@ -73,7 +73,16 @@ public class ConfigReader
 		{
 			e.printStackTrace();
 		}
-		
+		Constants.platform = System.getProperty("os.name");
+		Logger.log("You're currently running the program on : "+Constants.platform);
+		if(Constants.platform.toLowerCase().contains("7"))
+		{
+			Constants.definePressed = true;
+		}
+		else
+		{
+			Constants.definePressed = false;
+		}
 	}
 	
 	/**

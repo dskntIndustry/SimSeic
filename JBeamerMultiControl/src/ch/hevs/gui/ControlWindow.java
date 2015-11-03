@@ -34,6 +34,7 @@ import ch.hevs.core.MessagingQueue;
 import ch.hevs.ifaces.IIntercom;
 import ch.hevs.network.CommandEvent;
 import ch.hevs.network.ThreadedSocket;
+import ch.hevs.utils.Constants;
 import ch.hevs.utils.Logger;
 
 import javax.swing.JCheckBox;
@@ -258,6 +259,19 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					String[] cmd = null;
+					if((cmd = checkCommand(customCommandField.getText())) != null)
+					{
+						queue.getMessagequeue().add(new CommandEvent("localhost", cmd[0], cmd[1], cmd[2]));
+						System.out.println(cmd);
+					}
+					else
+					{
+						customCommandField.setText("Invalid number of params. Impossible to send this command.");
+					}
+				}
 			}
 
 			@Override
@@ -273,16 +287,20 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				String[] cmd = null;
-				if((cmd = checkCommand(customCommandField.getText())) != null)
+				if(!Constants.definePressed)
 				{
-					queue.getMessagequeue().add(new CommandEvent("localhost", cmd[0], cmd[1], cmd[2]));
-					System.out.println(cmd);
+					String[] cmd = null;
+					if((cmd = checkCommand(customCommandField.getText())) != null)
+					{
+						queue.getMessagequeue().add(new CommandEvent("localhost", cmd[0], cmd[1], cmd[2]));
+						System.out.println(cmd);
+					}
+					else
+					{
+						customCommandField.setText("Invalid number of params. Impossible to send this command.");
+					}
 				}
-				else
-				{
-					customCommandField.setText("Invalid number of params. Impossible to send this command.");
-				}
+
 			}
 		});
 		GridBagConstraints gbc_btnFireCustomEvent = new GridBagConstraints();
@@ -303,6 +321,19 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					String[] cmd = null;
+					if((cmd = checkCommand(customCommandField.getText())) != null)
+					{
+						queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", cmd[1], cmd[2]));
+						System.out.println(cmd);
+					}
+					else
+					{
+						customCommandField.setText("Invalid number of params. Impossible to send this command.");
+					}
+				}
 			}
 
 			@Override
@@ -318,16 +349,20 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				String[] cmd = null;
-				if((cmd = checkCommand(customCommandField.getText())) != null)
+				if(!Constants.definePressed)
 				{
-					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", cmd[1], cmd[2]));
-					System.out.println(cmd);
+					String[] cmd = null;
+					if((cmd = checkCommand(customCommandField.getText())) != null)
+					{
+						queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", cmd[1], cmd[2]));
+						System.out.println(cmd);
+					}
+					else
+					{
+						customCommandField.setText("Invalid number of params. Impossible to send this command.");
+					}
 				}
-				else
-				{
-					customCommandField.setText("Invalid number of params. Impossible to send this command.");
-				}
+
 			}
 		});
 		GridBagConstraints gbc_btnOverrideIP = new GridBagConstraints();
@@ -413,6 +448,40 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					if(btnConnect.isEnabled())
+					{
+
+						if(queue.getSockets().isEmpty())
+						{
+							ch.forEach((k, v)->
+							{
+								ThreadedSocket ms = new ThreadedSocket(v, 23);
+								queue.getSockets().add(ms);
+							});
+							queue.getSockets().forEach(elem->new Thread(elem).start());
+						}
+						// else
+						// {
+						//
+						// queue.getSockets().iterator().next().deinitSocket();
+						// ch.forEach((k, v)->
+						// {
+						// ThreadedSocket ms = new ThreadedSocket(v, 23);
+						// queue.getSockets().add(ms);
+						// });
+						// queue.getSockets().forEach(elem->new
+						// Thread(elem).start());
+						// }
+
+						btnConnect.setEnabled(false);
+
+						btnDisconnect.setEnabled(true);
+						statuspanel.setBackground(Color.GREEN);
+					}
+				}
+
 			}
 
 			@Override
@@ -428,34 +497,40 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				if(btnConnect.isEnabled())
+
+				if(!Constants.definePressed)
 				{
-					if(queue.getSockets().isEmpty())
+					if(btnConnect.isEnabled())
 					{
-						ch.forEach((k, v)->
+						if(queue.getSockets().isEmpty())
 						{
-							ThreadedSocket ms = new ThreadedSocket(v, 23);
-							queue.getSockets().add(ms);
-						});
-						queue.getSockets().forEach(elem->new Thread(elem).start());
+							ch.forEach((k, v)->
+							{
+								ThreadedSocket ms = new ThreadedSocket(v, 23);
+								queue.getSockets().add(ms);
+							});
+							queue.getSockets().forEach(elem->new Thread(elem).start());
+						}
+						// else
+						// {
+						//
+						// queue.getSockets().iterator().next().deinitSocket();
+						// ch.forEach((k, v)->
+						// {
+						// ThreadedSocket ms = new ThreadedSocket(v, 23);
+						// queue.getSockets().add(ms);
+						// });
+						// queue.getSockets().forEach(elem->new
+						// Thread(elem).start());
+						// }
+
+						btnConnect.setEnabled(false);
+
+						btnDisconnect.setEnabled(true);
+						statuspanel.setBackground(Color.GREEN);
 					}
-//					else
-//					{
-//
-//						queue.getSockets().iterator().next().deinitSocket();
-//						ch.forEach((k, v)->
-//						{
-//							ThreadedSocket ms = new ThreadedSocket(v, 23);
-//							queue.getSockets().add(ms);
-//						});
-//						queue.getSockets().forEach(elem->new Thread(elem).start());
-//					}
-
-					btnConnect.setEnabled(false);
-
-					btnDisconnect.setEnabled(true);
-					statuspanel.setBackground(Color.GREEN);
 				}
+
 			}
 		});
 		GridBagConstraints gbc_btnConnect = new GridBagConstraints();
@@ -475,6 +550,17 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					if(btnDisconnect.isEnabled())
+					{
+						queue.getSockets().forEach(s->s.deinitSocket());
+						queue.getSockets().clear();
+						btnConnect.setEnabled(true);
+						btnDisconnect.setEnabled(false);
+						statuspanel.setBackground(Color.RED);
+					}
+				}
 			}
 
 			@Override
@@ -490,14 +576,18 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				if(btnDisconnect.isEnabled())
+				if(!Constants.definePressed)
 				{
-					queue.getSockets().forEach(s->s.deinitSocket());
-					queue.getSockets().clear();
-					btnConnect.setEnabled(true);
-					btnDisconnect.setEnabled(false);
-					statuspanel.setBackground(Color.RED);
+					if(btnDisconnect.isEnabled())
+					{
+						queue.getSockets().forEach(s->s.deinitSocket());
+						queue.getSockets().clear();
+						btnConnect.setEnabled(true);
+						btnDisconnect.setEnabled(false);
+						statuspanel.setBackground(Color.RED);
+					}
 				}
+
 			}
 		});
 		GridBagConstraints gbc_btnDisconnect = new GridBagConstraints();
@@ -516,6 +606,21 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "pwr", "0!"));
+
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(5 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
 			}
 
 			@Override
@@ -531,18 +636,22 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "pwr", "0!"));
+				if(!Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "pwr", "0!"));
 
-				component.forEach(d->d.setEnabled(false));
-				try
-				{
-					Thread.sleep(5 * ThreadedSocket.TIMEOUT);
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(5 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
 				}
-				catch(InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
-				component.forEach(d->d.setEnabled(true));
+
 			}
 		});
 		GridBagConstraints gbc_btnPowerOff = new GridBagConstraints();
@@ -563,6 +672,21 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "pwr", "1!"));
+
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(5 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
 			}
 
 			@Override
@@ -578,18 +702,22 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "pwr", "1!"));
+				if(!Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "pwr", "1!"));
 
-				component.forEach(d->d.setEnabled(false));
-				try
-				{
-					Thread.sleep(5 * ThreadedSocket.TIMEOUT);
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(5 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
 				}
-				catch(InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
-				component.forEach(d->d.setEnabled(true));
+
 			}
 		});
 		GridBagConstraints gbc_btnPowerOn = new GridBagConstraints();
@@ -610,6 +738,20 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "asc", "0!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
 			}
 
 			@Override
@@ -625,17 +767,21 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "asc", "0!"));
-				component.forEach(d->d.setEnabled(false));
-				try
+				if(!Constants.definePressed)
 				{
-					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "asc", "0!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
 				}
-				catch(InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
-				component.forEach(d->d.setEnabled(true));
+
 			}
 		});
 		GridBagConstraints gbc_btnSrcAutoOff = new GridBagConstraints();
@@ -655,6 +801,20 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "asc", "1!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
 			}
 
 			@Override
@@ -670,17 +830,21 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "asc", "1!"));
-				component.forEach(d->d.setEnabled(false));
-				try
+				if(!Constants.definePressed)
 				{
-					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "asc", "1!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
 				}
-				catch(InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
-				component.forEach(d->d.setEnabled(true));
+
 			}
 		});
 		GridBagConstraints gbc_btnSrcAutoOn = new GridBagConstraints();
@@ -701,6 +865,20 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "src", "5!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
 			}
 
 			@Override
@@ -716,17 +894,21 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "src", "5!"));
-				component.forEach(d->d.setEnabled(false));
-				try
+				if(!Constants.definePressed)
 				{
-					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "src", "5!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
 				}
-				catch(InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
-				component.forEach(d->d.setEnabled(true));
+
 			}
 		});
 		GridBagConstraints gbc_btnSrcHDMI = new GridBagConstraints();
@@ -746,6 +928,20 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "2!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
 			}
 
 			@Override
@@ -761,17 +957,21 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "2!"));
-				component.forEach(d->d.setEnabled(false));
-				try
+				if(!Constants.definePressed)
 				{
-					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "2!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
 				}
-				catch(InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
-				component.forEach(d->d.setEnabled(true));
+
 			}
 		});
 		GridBagConstraints gbc_btnResolution43 = new GridBagConstraints();
@@ -791,6 +991,20 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "6!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
 			}
 
 			@Override
@@ -806,17 +1020,21 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "6!"));
-				component.forEach(d->d.setEnabled(false));
-				try
+				if(!Constants.definePressed)
 				{
-					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "6!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
 				}
-				catch(InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
-				component.forEach(d->d.setEnabled(true));
+
 			}
 		});
 		GridBagConstraints gbc_btnResolution1610 = new GridBagConstraints();
@@ -836,6 +1054,20 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "1!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
 			}
 
 			@Override
@@ -851,17 +1083,21 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "1!"));
-				component.forEach(d->d.setEnabled(false));
-				try
+				if(!Constants.definePressed)
 				{
-					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "1!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
 				}
-				catch(InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
-				component.forEach(d->d.setEnabled(true));
+
 			}
 		});
 		GridBagConstraints gbc_btnResolutionNative = new GridBagConstraints();
@@ -881,6 +1117,20 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "cel", "0!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(2 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
 			}
 
 			@Override
@@ -896,17 +1146,21 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "cel", "0!"));
-				component.forEach(d->d.setEnabled(false));
-				try
+				if(!Constants.definePressed)
 				{
-					Thread.sleep(2 * ThreadedSocket.TIMEOUT);
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "cel", "0!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(2 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
 				}
-				catch(InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
-				component.forEach(d->d.setEnabled(true));
+
 			}
 		});
 		GridBagConstraints gbc_btnCeilOff = new GridBagConstraints();
@@ -926,6 +1180,20 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "cel", "1!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(2 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
 			}
 
 			@Override
@@ -941,17 +1209,21 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "cel", "1!"));
-				component.forEach(d->d.setEnabled(false));
-				try
+				if(!Constants.definePressed)
 				{
-					Thread.sleep(2 * ThreadedSocket.TIMEOUT);
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "cel", "1!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(2 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
 				}
-				catch(InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
-				component.forEach(d->d.setEnabled(true));
+
 			}
 		});
 		GridBagConstraints gbc_btnCeilOn = new GridBagConstraints();
@@ -971,6 +1243,20 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "3!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
 			}
 
 			@Override
@@ -986,17 +1272,21 @@ public class ControlWindow extends JFrame implements IIntercom
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "3!"));
-				component.forEach(d->d.setEnabled(false));
-				try
+				if(!Constants.definePressed)
 				{
-					Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "3!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
 				}
-				catch(InterruptedException e1)
-				{
-					e1.printStackTrace();
-				}
-				component.forEach(d->d.setEnabled(true));
+
 			}
 		});
 		GridBagConstraints gbc_btnResolution169 = new GridBagConstraints();
