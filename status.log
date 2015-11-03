@@ -1,0 +1,20 @@
+----------------
+15:55:09:065 -> Configuration file successfully found.
+----------------
+15:55:09:097 -> Configuration file can be used now.
+----------------
+15:55:09:097 -> Configuration file successfully loaded & read.
+----------------
+15:55:09:097 -> The configuration file contains : 
+
+The configuration file contains : 
+beamer0 : 10.13.1.200
+beamer1 : 10.13.1.201
+beamer2 : 10.13.1.202
+beamer3 : 10.13.1.203
+beamer4 : 10.13.1.204
+beamer5 : 10.13.1.205
+beamer6 : 10.13.1.206
+
+----------------
+15:55:11:098 -> You're currently running the program on : Windows 8.1
