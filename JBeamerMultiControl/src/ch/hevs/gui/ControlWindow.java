@@ -93,6 +93,7 @@ public class ControlWindow extends JFrame implements IIntercom
 	private JMenu mnNewMenu;
 	private JMenuItem mntmExit;
 	private JButton btnOverrideIP;
+	private JButton btnStartVideo;
 
 	/**
 	 * Constructor of the ControlWindow object (GUI)
@@ -144,7 +145,7 @@ public class ControlWindow extends JFrame implements IIntercom
 			e.printStackTrace();
 		}
 
-		setSize(new Dimension(800, 350));
+		setSize(new Dimension(800, 481));
 		setResizable(false);
 		setTitle("Beamers Remote Control");
 
@@ -198,11 +199,11 @@ public class ControlWindow extends JFrame implements IIntercom
 		gbl_tab0.columnWidths = new int[]
 		{ 116, 100, 70, 0, 0 };
 		gbl_tab0.rowHeights = new int[]
-		{ 29, 26, 23, 0, 0, 0, 0, 42, 0 };
+		{ 29, 26, 23, 0, 0, 0, 0, 36, 0 };
 		gbl_tab0.columnWeights = new double[]
 		{ 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		gbl_tab0.rowWeights = new double[]
-		{ 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		{ 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		tab0.setLayout(gbl_tab0);
 
 		tabbedPane.addTab("Options", null, tab1, null);
@@ -974,12 +975,77 @@ public class ControlWindow extends JFrame implements IIntercom
 
 			}
 		});
+		
+		btnStartVideo = new JButton("Start Video");
+		btnStartVideo.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		GridBagConstraints gbc_btnStartVideo = new GridBagConstraints();
+		gbc_btnStartVideo.insets = new Insets(0, 0, 0, 5);
+		gbc_btnStartVideo.gridx = 0;
+		gbc_btnStartVideo.gridy = 7;
+		tab0.add(btnStartVideo, gbc_btnStartVideo);
 		GridBagConstraints gbc_btnResolution43 = new GridBagConstraints();
 		gbc_btnResolution43.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnResolution43.insets = new Insets(0, 0, 0, 5);
 		gbc_btnResolution43.gridx = 2;
 		gbc_btnResolution43.gridy = 7;
 		tab0.add(btnResolution43, gbc_btnResolution43);
+		
+		/**
+		 * Event sent to start projection 
+		 */
+		btnStartVideo.addMouseListener(new MouseListener()
+		{
+			
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{}
+			
+			@Override
+			public void mousePressed(MouseEvent e)
+			{
+				if(Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "10.13.1.11", "start", "1!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e)
+			{}
+			
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{}
+			
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if(!Constants.definePressed)
+				{
+					queue.getMessagequeue().add(new CommandEvent("localhost", "10.13.1.11", "start", "1!"));
+					component.forEach(d->d.setEnabled(false));
+					try
+					{
+						Thread.sleep(1 * ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					component.forEach(d->d.setEnabled(true));
+				}
+			}
+		});
 
 		btnResolution1610.addMouseListener(new MouseListener()
 		{
