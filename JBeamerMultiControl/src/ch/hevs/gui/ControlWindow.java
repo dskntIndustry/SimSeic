@@ -431,6 +431,7 @@ public class ControlWindow extends JFrame implements IIntercom
 				gbc_statuspanel.gridx = 1;
 				gbc_statuspanel.gridy = 0;
 				tab0.add(statuspanel, gbc_statuspanel);
+				statuspanel.setBackground(Color.RED);
 
 		textArea.setFont(new Font("Lucida Console", Font.PLAIN, 11));
 		scrollPane = new JScrollPane(textArea);
@@ -501,7 +502,15 @@ public class ControlWindow extends JFrame implements IIntercom
 							});
 							queue.getSockets().forEach(elem->new Thread(elem).start());
 							queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "src", "4!"));
-							queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "1!"));
+							try
+							{
+								Thread.sleep(ThreadedSocket.TIMEOUT);
+							}
+							catch(InterruptedException e1)
+							{
+								e1.printStackTrace();
+							}
+							queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "1"));
 						}
 						btnConnect.setEnabled(false);
 						btnDisconnect.setEnabled(true);
@@ -535,7 +544,15 @@ public class ControlWindow extends JFrame implements IIntercom
 							});
 							queue.getSockets().forEach(elem->new Thread(elem).start());
 							queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "src", "4!"));
-							queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "1!"));
+							try
+							{
+								Thread.sleep(ThreadedSocket.TIMEOUT);
+							}
+							catch(InterruptedException e1)
+							{
+								e1.printStackTrace();
+							}
+							queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "1"));
 						}
 						btnConnect.setEnabled(false);
 						btnDisconnect.setEnabled(true);
@@ -688,6 +705,15 @@ public class ControlWindow extends JFrame implements IIntercom
 						e1.printStackTrace();
 					}
 					component.forEach(d->d.setEnabled(true));
+					try
+					{
+						Thread.sleep(ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "1"));
 				}
 			}
 
@@ -716,6 +742,15 @@ public class ControlWindow extends JFrame implements IIntercom
 						e1.printStackTrace();
 					}
 					component.forEach(d->d.setEnabled(true));
+					try
+					{
+						Thread.sleep(ThreadedSocket.TIMEOUT);
+					}
+					catch(InterruptedException e1)
+					{
+						e1.printStackTrace();
+					}
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "1"));
 				}
 			}
 		});
