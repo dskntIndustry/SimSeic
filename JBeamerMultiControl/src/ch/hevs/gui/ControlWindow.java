@@ -463,6 +463,7 @@ public class ControlWindow extends JFrame implements IIntercom
 							});
 							queue.getSockets().forEach(elem->new Thread(elem).start());
 							queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "src", "4!"));
+							queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "1!"));
 						}
 						
 						// else
@@ -514,6 +515,7 @@ public class ControlWindow extends JFrame implements IIntercom
 							});
 							queue.getSockets().forEach(elem->new Thread(elem).start());
 							queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "src", "4!"));
+							queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "arz", "1!"));
 						}
 						// else
 						// {
@@ -871,7 +873,7 @@ public class ControlWindow extends JFrame implements IIntercom
 			{
 				if(Constants.definePressed)
 				{
-					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "src", "5!"));
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "src", "4!"));
 					component.forEach(d->d.setEnabled(false));
 					try
 					{
@@ -900,7 +902,7 @@ public class ControlWindow extends JFrame implements IIntercom
 			{
 				if(!Constants.definePressed)
 				{
-					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "src", "5!"));
+					queue.getMessagequeue().add(new CommandEvent("localhost", "0.0.0.0", "src", "4!"));
 					component.forEach(d->d.setEnabled(false));
 					try
 					{

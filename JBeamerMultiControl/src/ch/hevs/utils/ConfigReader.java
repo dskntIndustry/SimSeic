@@ -1,6 +1,7 @@
 package ch.hevs.utils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,7 +21,9 @@ public class ConfigReader
 	private TreeMap<String, String> configholder;
 	private InputStream in;
 	private BufferedReader bf;
+	private File file;
 	private String res = "The configuration file contains : \n";
+	
 	
 	/**
 	 * Construct the config reader
@@ -33,7 +36,10 @@ public class ConfigReader
 		configholder = new TreeMap<String, String>();
 		try
 		{
-			in = new FileInputStream(f);
+			file = new File(f);
+			Logger.log("Info : Config file is located at : "+file.getAbsolutePath());
+			in = new FileInputStream(file);
+			
 		}
 		catch(FileNotFoundException e)
 		{
@@ -41,12 +47,16 @@ public class ConfigReader
 		}
 		if(in != null)
 		{
-			Logger.log("Configuration file successfully found.");
+			Logger.log("Configuration file successfully found and input stream was created successfully.");
 			bf = new BufferedReader(new InputStreamReader(in));
 		}
 		else
 		{
 			Logger.log("Error : Opening configuration file.");
+			if(in == null)
+			{
+				Logger.log("Error : Input stream is null.");
+			}
 		}
 		
 		if(bf == null)
