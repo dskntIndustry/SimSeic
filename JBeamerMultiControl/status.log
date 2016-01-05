@@ -1,0 +1,20 @@
+----------------
+15:05:25:916 -> Info : Config file is located at : C:\Users\dsknt\git\SimSeic\JBeamerMultiControl\config.properties
+----------------
+15:05:25:932 -> Configuration file successfully found and input stream was created successfully.
+----------------
+15:05:25:932 -> Configuration file can be used now.
+----------------
+15:05:25:932 -> Configuration file successfully loaded & read.
+----------------
+15:05:25:932 -> The configuration file contains : 
+
+The configuration file contains : 
+beamer1 : 10.13.1.201
+beamer2 : 10.13.1.202
+beamer3 : 10.13.1.203
+beamer4 : 10.13.1.204
+beamer5 : 10.13.1.205
+
+----------------
+15:05:27:944 -> You're currently running the program on : Windows 10
